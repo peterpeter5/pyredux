@@ -1,7 +1,8 @@
 from __future__ import absolute_import, unicode_literals
 import unittest
 from pyrsistent import pmap
-from ..Store import Store, NoSubscriptionFoundError
+from ..Store import Store
+from pyredux.ErrorsAndConstants import NoSubscriptionFoundError
 
 
 def static_reducer(state=pmap(), action=None):

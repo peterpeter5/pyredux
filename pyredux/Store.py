@@ -1,10 +1,7 @@
 from __future__ import unicode_literals, absolute_import
+
+from pyredux.ErrorsAndConstants import NoSubscriptionFoundError
 from pyrsistent import pmap, pvector
-
-
-class NoSubscriptionFoundError(Exception):
-    def __init__(self, *args, **kwargs):
-        super(NoSubscriptionFoundError, self).__init__(*args, **kwargs)
 
 
 class Store(object):
