@@ -1,6 +1,6 @@
 from __future__ import unicode_literals, absolute_import
 
-from pyredux.ErrorsAndConstants import NoSubscriptionFoundError
+from pyredux.ErrorsAndConstants import NoSubscriptionFoundError, StoreInitAction
 from pyrsistent import pmap, pvector
 
 
@@ -11,7 +11,11 @@ class Store(object):
         self.__subscriber = pvector()
 
     def dispatch(self, action):
-        new_state = self.__reducer(self.__state, action)
+        action_type = getattr(action, "type", None)
+        if action_type and action_type == StoreInitAction.initial_action_type:
+            new_state = self.__reducer(action=action)
+        else:
+            new_state = self.__reducer(self.__state, action)
         self.__state = new_state
         for subscriber in self.__subscriber:
             subscriber(self)
@@ -37,3 +41,14 @@ class Store(object):
     @property
     def _subscriber(self):
         return self.__subscriber
+
+
+def create_store(reducer, preloaded_state=None, enhancer=None):
+    if enhancer is not None:
+        raise NotImplementedError("Dont know if that makes sense with original api")
+    if preloaded_state is not None:
+        raise NotImplementedError("Future work")
+
+    store = Store(reducer)
+    store.dispatch(StoreInitAction())
+    return store

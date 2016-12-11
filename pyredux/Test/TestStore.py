@@ -1,15 +1,20 @@
 from __future__ import absolute_import, unicode_literals
 import unittest
 from pyrsistent import pmap
-from ..Store import Store
+from ..Store import Store, create_store
 from pyredux.ErrorsAndConstants import NoSubscriptionFoundError
 
 
 def static_reducer(state=pmap(), action=None):
     return state.update({"action": action})
 
+
 def add_to_string_reducer(state=pmap(), action=None):
     return state.update({"action": "new" + action})
+
+
+def init_reducer(state=pmap({"init": True}), action=None):
+    return state
 
 
 class TestStore(unittest.TestCase):
@@ -80,4 +85,10 @@ class TestStore(unittest.TestCase):
         action = "unittest"
         new_state = store.dispatch(action)
         self.assertEqual(pmap({"action": "newunittest"}), new_state)
+
+    def test_create_store_will_return_initialized_store(self):
+        new_store = create_store(init_reducer)
+        init_state = pmap({"init": True})
+        self.assertEqual(init_state, new_store.get_state())
+
 

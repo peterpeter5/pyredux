@@ -9,7 +9,7 @@ class NoSubscriptionFoundError(Exception):
 
 
 class StoreInitAction(ActionBase):
-    action_type = "@@INTERNAL_INIT_REDUX_STORE!!DONT_MATCH_ME!@"
+    initial_action_type = "@@INTERNAL_INIT_REDUX_STORE!!DONT_MATCH_ME!@"
 
     def __init__(self):
-        super(StoreInitAction, self).__init__(self.action_type)
+        super(StoreInitAction, self).__init__(self.initial_action_type)
