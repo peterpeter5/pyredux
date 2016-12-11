@@ -2,6 +2,7 @@ from __future__ import absolute_import, unicode_literals
 
 import collections
 
+from pyredux.ErrorsAndConstants import StoreInitAction
 from pyrsistent import pmap
 
 
@@ -11,7 +12,10 @@ def combine_reducer(reducers):
     reducer_names, reducer_funcs = _determine_reducer_names_and_funcs(reducers)
 
     combined_initial_state = pmap(
-        zip(reducer_names, [pmap()] * len(reducer_names))
+        map(
+            lambda red_name, red_func: (red_name, _get_initial_reducer_state(red_func)),
+            reducer_names, reducer_funcs
+        )
     )
     final_reducers = pmap(zip(reducer_names, reducer_funcs))
 
@@ -42,6 +46,9 @@ def _determine_reducer_names_and_funcs(reducers):
         reducer_funcs = reducers
     return reducer_names, reducer_funcs
 
+
+def _get_initial_reducer_state(reducer_func):
+    return reducer_func(action=StoreInitAction())
 
 
 
