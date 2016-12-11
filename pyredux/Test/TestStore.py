@@ -7,6 +7,9 @@ from ..Store import Store, NoSubscriptionFoundError
 def static_reducer(state=pmap(), action=None):
     return state.update({"action": action})
 
+def add_to_string_reducer(state=pmap(), action=None):
+    return state.update({"action": "new" + action})
+
 
 class TestStore(unittest.TestCase):
 
@@ -69,3 +72,11 @@ class TestStore(unittest.TestCase):
         self.assertEqual(len(store._subscriber), 1)
         store.unsubscribe(subscriber)
         self.assertEqual(len(store._subscriber), 0)
+
+    def test_replace_reducer(self):
+        store = Store(static_reducer)
+        store = store.replace_reducer(add_to_string_reducer)
+        action = "unittest"
+        new_state = store.dispatch(action)
+        self.assertEqual(pmap({"action": "newunittest"}), new_state)
+

@@ -35,6 +35,7 @@ class Store(object):
 
     def replace_reducer(self, new_reducer):
         self.__reducer = new_reducer
+        return self
 
     @property
     def _subscriber(self):
