@@ -1,18 +1,8 @@
 from __future__ import absolute_import, unicode_literals
+import collections
 
 
-class ActionBase(object):
-
-    def __init__(self, action_type, payload=None):
-        if action_type is None:
-            raise NotImplementedError("Every Action needs a type!")
-        self.__type = action_type
-        self.__payload = payload
-
-    @property
-    def type(self):
-        return self.__type
-
-    @property
-    def payload(self):
-        return self.__payload
+def create_action_type(action_name):
+    ActionType = collections.namedtuple(action_name, ("payload", "type"))
+    ActionType.__new__.__defaults__ = (None, action_name)
+    return ActionType

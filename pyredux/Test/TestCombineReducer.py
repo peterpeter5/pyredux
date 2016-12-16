@@ -3,30 +3,32 @@ import unittest
 import inspect
 
 from pyrsistent import pmap
+
+from pyredux.ErrorsAndConstants import WrongFormattedReducerArgs
 from ..Reducer import combine_reducer
 
 
-def a_reducer(state=pmap(), action=None):
+def a_reducer(action=None, state=pmap()):
     return state.update({"actionA": action})
 
 
-def b_reducer(state=pmap(), action=None):
+def b_reducer(action=None, state=pmap()):
     return state.update({"actionB": action})
 
 
 class ReducerKlass(object):
-    def c_reducer(self, state=pmap(), action=None):
+    def c_reducer(self, action=None, state=pmap()):
         return state.update({"actionC": action})
 
 
-def e_reducer(state=pmap(), action=None):
+def e_reducer(action=None, state=pmap()):
     if action.type == "do":
         return state.update({"actionE": action})
     else:
         return state
 
 
-def d_reducer(state=pmap(), action=None):
+def d_reducer(action=None, state=pmap()):
     if action.type == "do_it":
         return state.update({"actionE": action})
     else:
@@ -87,7 +89,7 @@ class TestCombineReducer(unittest.TestCase):
         action = ActionMock("ignore_action")
         combined = combine_reducer([e_reducer, d_reducer])
         initial_state = combined(action=action)
-        untransformed_state = combined(initial_state, action)
+        untransformed_state = combined(action, initial_state)
         self.assertTrue(
             initial_state is untransformed_state,
             "State object has not the same reference! It must be updated!"
@@ -98,20 +100,27 @@ class TestCombineReducer(unittest.TestCase):
         action = ActionMock("do")
         combined = combine_reducer([e_reducer, d_reducer])
         initial_state = combined(action=initial_action)
-        transformed_state = combined(initial_state, action)
+        transformed_state = combined(action, initial_state)
         self.assertTrue(
             initial_state is not transformed_state,
             "State object has not the same reference! It must be updated!"
         )
 
     def test_all_reducers_will_have_their_initial_state(self):
-        def a_init_reducer(state=pmap({1: "a"}), action=None):
+        def a_init_reducer(action=None, state=pmap({1: "a"})):
             return state
 
-        def b_init_reducer(state=pmap({2: "b"}), action=None):
+        def b_init_reducer(action=None, state=pmap({2: "b"})):
             return state
 
         combined = combine_reducer({"a_r": a_init_reducer, "b_r": b_init_reducer})
         new_state = combined(action="init_unittest")
         expected_state = pmap({"a_r": pmap({1: "a"}), "b_r": pmap({2: "b"})})
         self.assertEqual(expected_state, new_state)
+
+    def test_wrong_formatted_reducer_args_will_raise_error(self):
+        self.assertRaises(
+            WrongFormattedReducerArgs,
+            combine_reducer,
+            a_reducer
+        )

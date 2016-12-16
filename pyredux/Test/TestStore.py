@@ -5,25 +5,25 @@ from ..Store import Store, create_store
 from pyredux.ErrorsAndConstants import NoSubscriptionFoundError
 
 
-def static_reducer(state=pmap(), action=None):
+def static_reducer(action, state=pmap()):
     return state.update({"action": action})
 
 
-def add_to_string_reducer(state=pmap(), action=None):
+def add_to_string_reducer(action, state=pmap()):
     return state.update({"action": "new" + action})
 
 
-def init_reducer(state=pmap({"init": True}), action=None):
+def init_reducer(action, state=pmap({"init": True})):
     return state
 
 
 class TestStore(unittest.TestCase):
 
-    def test_store_exposes_js_api_plus_unsubscribe(self):
+    def test_store_exposes_pythonic_js_api_plus_unsubscribe(self):
         store = Store(static_reducer)
         methods = dir(store)
         public_methods = filter(lambda method_name: not method_name.startswith("_"), methods)
-        expected_public_methods = ["dispatch", "subscribe", "get_state", "replace_reducer", "unsubscribe"]
+        expected_public_methods = ["dispatch", "subscribe", "state", "replace_reducer", "unsubscribe"]
         self.assertItemsEqual(
             public_methods,
             expected_public_methods
@@ -31,13 +31,13 @@ class TestStore(unittest.TestCase):
 
     def test_initial_state_of_store_is_empty_pmap(self):
         store = Store(static_reducer)
-        initial_state = store.get_state()
+        initial_state = store.state
         self.assertEqual(pmap({}), initial_state)
 
     def test_store_updates_its_state_after_dispatch(self):
         store = Store(static_reducer)
         store.dispatch("unittest")
-        self.assertEqual(store.get_state(), pmap({"action": "unittest"}))
+        self.assertEqual(store.state, pmap({"action": "unittest"}))
 
     def test_dispatch_calls_reducer_and_returns_new_state(self):
         store = Store(static_reducer)
@@ -57,7 +57,7 @@ class TestStore(unittest.TestCase):
         def subscriber(sub_store):
             self._subscriber_called = True
             self.assertEqual(store, sub_store)
-            self.assertEqual(sub_store.get_state(), pmap({"action": action}))
+            self.assertEqual(sub_store.state, pmap({"action": action}))
 
         store = store.subscribe(subscriber)
         store.dispatch(action)
@@ -89,6 +89,6 @@ class TestStore(unittest.TestCase):
     def test_create_store_will_return_initialized_store(self):
         new_store = create_store(init_reducer)
         init_state = pmap({"init": True})
-        self.assertEqual(init_state, new_store.get_state())
+        self.assertEqual(init_state, new_store.state)
 
 

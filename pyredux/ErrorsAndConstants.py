@@ -1,15 +1,15 @@
 from __future__ import absolute_import, unicode_literals
 
-from pyredux.Actions import ActionBase
+from pyredux.Actions import create_action_type
 
 
 class NoSubscriptionFoundError(Exception):
-    def __init__(self, *args, **kwargs):
-        super(NoSubscriptionFoundError, self).__init__(*args, **kwargs)
+    pass
 
 
-class StoreInitAction(ActionBase):
-    initial_action_type = "@@INTERNAL_INIT_REDUX_STORE!!DONT_MATCH_ME!@"
+class WrongFormattedReducerArgs(Exception):
+    pass
 
-    def __init__(self):
-        super(StoreInitAction, self).__init__(self.initial_action_type)
+
+initial_action_type = "INTERNAL_INIT_REDUX_STORE"
+StoreInitAction = create_action_type(initial_action_type)

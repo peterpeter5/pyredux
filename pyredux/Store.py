@@ -11,17 +11,18 @@ class Store(object):
         self.__subscriber = pvector()
 
     def dispatch(self, action):
-        action_type = getattr(action, "type", None)
-        if action_type and action_type == StoreInitAction.initial_action_type:
+
+        if isinstance(action, StoreInitAction):
             new_state = self.__reducer(action=action)
         else:
-            new_state = self.__reducer(self.__state, action)
+            new_state = self.__reducer(action, self.__state)
         self.__state = new_state
         for subscriber in self.__subscriber:
             subscriber(self)
         return new_state
 
-    def get_state(self):
+    @property
+    def state(self):
         return self.__state
 
     def subscribe(self, subscriber):
