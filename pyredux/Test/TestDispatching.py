@@ -6,6 +6,7 @@ from pyrsistent import pmap
 
 from pyredux.Actions import create_action_type
 from pyredux.Reducer import default_reducer, combine_reducer
+from pyredux.Store import Store, create_store
 
 StaticAction = create_action_type("Static")
 NormalAction = create_action_type("normal")
@@ -88,4 +89,30 @@ class FunctionalTests(unittest.TestCase):
         self.assertEqual(
             expected_state,
             combined_reducer(unknown_action)
+        )
+
+    def test_store_can_handle_combined_reducers_with_singledispatch(self):
+        combined = combine_reducer([reducer_a, normal_reducer])
+        expected_state = freeze({
+            "normal_reducer": {"my_type": "normal"},
+            "reducer_a": {"static": True}
+        })
+        store = create_store(combined)
+        self.assertEqual(
+            expected_state,
+            store.state
+        )
+
+        dyn_action = DynamicAction()
+        expected_state = freeze({
+            "normal_reducer": {"my_type": "normal"},
+            "reducer_a": {
+                "static": True,
+                "dynamic": "dynamo"
+            }
+        })
+        actual_state = store.dispatch(dyn_action)
+        self.assertEqual(
+            expected_state,
+            actual_state
         )
