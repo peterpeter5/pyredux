@@ -15,7 +15,7 @@ class Store(object):
         if isinstance(action, StoreInitAction):
             new_state = self.__setup_reducers(action)
         else:
-            new_state = self.__reducer(action, self.__state)
+            new_state = self.__reducer(action, self.state)
         self.__state = new_state
         for subscriber in self.__subscriber:
             subscriber(self)
@@ -56,8 +56,6 @@ class Store(object):
 def create_store(reducer, preloaded_state=None, enhancer=None):
     if enhancer is not None:
         return enhancer(create_store)(reducer, preloaded_state)
-    if preloaded_state is None:
-        preloaded_state = pmap({})
 
     store = Store(reducer, preloaded_state)
     store.dispatch(StoreInitAction())
