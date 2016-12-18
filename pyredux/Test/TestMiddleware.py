@@ -43,6 +43,7 @@ def middleware_dispatching_extra(store):
 @middleware
 def middleware_decorated(store, next_middleware, action):
     call_chain.append("d")
+    assert store.state is not None
     return next_middleware(action)
 
 

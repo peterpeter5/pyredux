@@ -43,4 +43,6 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 PyEnv
+.coverage
+cover
 
