@@ -46,7 +46,7 @@ class Store(object):
 
 def create_store(reducer, preloaded_state=None, enhancer=None):
     if enhancer is not None:
-        raise NotImplementedError("Dont know if that makes sense with original api")
+        return enhancer(create_store)(reducer, preloaded_state)
     if preloaded_state is not None:
         raise NotImplementedError("Future work")
 
