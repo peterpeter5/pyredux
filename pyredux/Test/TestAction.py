@@ -1,7 +1,10 @@
 from __future__ import absolute_import, unicode_literals
+
+import collections
 import unittest
 
 from pyredux import Actions
+from pyredux.Actions import create_typed_action_creator
 
 
 class TestActionCreator(unittest.TestCase):
@@ -33,3 +36,18 @@ class TestActionCreator(unittest.TestCase):
         self.assertIsInstance(action_a, ActionBase)
         self.assertEqual(action_a.type, "A_Action")
         self.assertEqual(action_a.payload, "payload")
+
+    def test_type_action_creator(self):
+        ActionBaseType, basic_action_creator = create_typed_action_creator("ActionA")
+        a_action = basic_action_creator()
+        b_action = basic_action_creator("payload_b")
+        c_action = basic_action_creator("payload_c", "myCustomSubType")
+        actions_type = map(
+            lambda action: isinstance(action, ActionBaseType),
+            [a_action, b_action, c_action]
+        )
+        self.assertTrue(all(actions_type))
+        actions_subtype = map(lambda action: action.type == "ActionA", [a_action, b_action])
+        actions_subtype.append(c_action.type == "myCustomSubType")
+        self.assertTrue(all(actions_subtype))
+        self.assertEqual(c_action.payload, "payload_c")
