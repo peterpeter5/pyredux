@@ -50,7 +50,8 @@ def _determine_reducer_names_and_funcs(reducers):
         reducer_names = map(lambda red: _get_reducer_name_from_func(red), reducers)
         reducer_funcs = reducers
     else:
-        raise WrongFormattedReducerArgs("Reducer-Argument has to be dict(str, func) or an iterable of funcs")
+        raise WrongFormattedReducerArgs(
+            "Reducer-Argument has to be dict(str, func) or an iterable of funcs! Found instead: <%s>" % str(reducers))
     return reducer_names, reducer_funcs
 
 
