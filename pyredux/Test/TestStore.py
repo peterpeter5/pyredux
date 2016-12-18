@@ -1,5 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 import unittest
+
+from pyrsistent import freeze
 from pyrsistent import pmap
 from ..Store import Store, create_store
 from pyredux.ErrorsAndConstants import NoSubscriptionFoundError
@@ -14,6 +16,10 @@ def add_to_string_reducer(action, state=pmap()):
 
 
 def init_reducer(action, state=pmap({"init": True})):
+    return state
+
+
+def do_nothing_reducer(action, state):
     return state
 
 
@@ -90,5 +96,15 @@ class TestStore(unittest.TestCase):
         new_store = create_store(init_reducer)
         init_state = pmap({"init": True})
         self.assertEqual(init_state, new_store.state)
+
+    def test_can_insert_a_preloaded_state_into_store(self):
+        preloaded_state = freeze({
+            "init": True
+        })
+        store = create_store(do_nothing_reducer, preloaded_state)
+        self.assertEqual(
+            store.state,
+            preloaded_state
+        )
 
 

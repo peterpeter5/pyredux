@@ -5,15 +5,15 @@ from pyrsistent import pmap, pvector
 
 
 class Store(object):
-    def __init__(self, reducer):
+    def __init__(self, reducer, preloaded_state=None):
         self.__reducer = reducer
-        self.__state = pmap({})
+        self.__state = preloaded_state
         self.__subscriber = pvector()
 
     def dispatch(self, action):
 
         if isinstance(action, StoreInitAction):
-            new_state = self.__reducer(action=action)
+            new_state = self.__setup_reducers(action)
         else:
             new_state = self.__reducer(action, self.__state)
         self.__state = new_state
@@ -21,9 +21,18 @@ class Store(object):
             subscriber(self)
         return new_state
 
+    def __setup_reducers(self, action):
+        if self.__state is None:
+            return self.__reducer(action=action)
+        else:
+            return self.__reducer(action, self.__state)
+
     @property
     def state(self):
-        return self.__state
+        if self.__state is None:
+            return pmap({})
+        else:
+            return self.__state
 
     def subscribe(self, subscriber):
         self.__subscriber = self.__subscriber.append(subscriber)
@@ -47,9 +56,9 @@ class Store(object):
 def create_store(reducer, preloaded_state=None, enhancer=None):
     if enhancer is not None:
         return enhancer(create_store)(reducer, preloaded_state)
-    if preloaded_state is not None:
-        raise NotImplementedError("Future work")
+    if preloaded_state is None:
+        preloaded_state = pmap({})
 
-    store = Store(reducer)
+    store = Store(reducer, preloaded_state)
     store.dispatch(StoreInitAction())
     return store
