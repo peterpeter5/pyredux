@@ -1,6 +1,4 @@
 from __future__ import absolute_import, unicode_literals
-
-from functools import partial
 from functools import wraps
 from pyredux.Utils import compose
 

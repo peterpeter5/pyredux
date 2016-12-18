@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 from functools import reduce
 
+
 class NotCallableError(Exception):
     pass
 
