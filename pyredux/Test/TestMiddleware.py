@@ -13,10 +13,10 @@ call_chain = []
 
 def middleware_a(store):
     def _next_wrapper(next_middleware):
-        def middleware(action):
+        def _middleware(action):
             call_chain.append("a")
             return next_middleware(action)
-        return middleware
+        return _middleware
     return _next_wrapper
 
 

@@ -4,9 +4,11 @@ import unittest
 from pyrsistent import freeze
 from pyrsistent import pmap
 
-from pyredux.Actions import create_action_type
-from pyredux.Reducer import default_reducer, combine_reducer
-from pyredux.Store import Store, create_store
+from pyredux import apply_middleware
+from pyredux import create_action_type
+from pyredux import default_reducer, combine_reducer
+from pyredux import create_store
+from pyredux import middleware
 
 StaticAction = create_action_type("Static")
 NormalAction = create_action_type("normal")
@@ -38,7 +40,23 @@ def normal_reducer(action, state=pmap({"my_type": "normal"})):
         return state
 
 
+logger = []
+
+
+@middleware
+def logging_middleware(store, next_middleware, action):
+    state_dict = {"action": action, "old_state": store.state}
+    next_state = next_middleware(action)
+    state_dict["new_state"] = next_state
+    logger.append(state_dict)
+    return next_state
+
+
 class FunctionalTests(unittest.TestCase):
+
+    def setUp(self):
+        global logger
+        logger = []
 
     def test_combine_reducers_with_singledispatch(self):
         combined_reducer = combine_reducer((normal_reducer, reducer_a))
@@ -115,4 +133,52 @@ class FunctionalTests(unittest.TestCase):
         self.assertEqual(
             expected_state,
             actual_state
+        )
+
+    def test_store_can_apply_single_middleware_and_dispatch(self):
+        combined_reducer = combine_reducer((normal_reducer, reducer_a))
+        static_action = StaticAction(type="AppendAction", payload="900")
+        store = create_store(combined_reducer, enhancer=apply_middleware(
+            logging_middleware
+        ))
+        new_state = store.dispatch(static_action)
+        self.assertEqual(new_state, store.state)
+
+    def test_middleware_will_be_called_after_store_init(self):
+        combined_reducer = combine_reducer({"n": normal_reducer, "a": reducer_a})
+        store = create_store(combined_reducer, enhancer=apply_middleware(
+            logging_middleware
+        ))
+        self.assertEqual(len(logger), 0)
+        self.assertEqual(
+            store.state,
+            freeze({
+                "a": pmap({"static": True}),
+                "n": pmap({"my_type": "normal"}),
+            })
+        )
+
+    def test_middleware_will_be_called_on_first_user_dispatch(self):
+        combined_reducer = combine_reducer({"n": normal_reducer, "a": reducer_a})
+        store = create_store(combined_reducer, enhancer=apply_middleware(
+            logging_middleware
+        ))
+        static_action = StaticAction(type="AppendAction", payload="900")
+        store.dispatch(static_action)
+        self.assertEqual(len(logger), 1)
+        self.assertNotEqual(logger[0]["old_state"], store.state)
+        self.assertEqual(
+            logger[0]["old_state"],
+            freeze({
+                "a": pmap({"static": True}),
+                "n": pmap({"my_type": "normal"}),
+            })
+        )
+        self.assertEqual(logger[0]["new_state"], store.state)
+        self.assertEqual(
+            store.state,
+            freeze({
+                "a": {"static": True, 'action': (static_action.type, static_action.payload)},
+                "n": pmap({"my_type": "normal"}),
+            })
         )
