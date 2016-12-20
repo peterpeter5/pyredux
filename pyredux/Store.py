@@ -54,6 +54,13 @@ class Store(object):
 
 
 def create_store(reducer, preloaded_state=None, enhancer=None):
+    """
+    :param reducer: reducer-function (single-function)
+    :param preloaded_state: the preloaded-state your application should start with
+    :type preloaded_state: pyrsistent.PMap
+    :param enhancer: enhancer-function. Mostly used for apply_middleware
+    :rtype: Store
+    """
     if enhancer is not None:
         return enhancer(create_store)(reducer, preloaded_state)
 

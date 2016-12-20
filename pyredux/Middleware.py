@@ -30,6 +30,10 @@ class RestrictedStore(object):
 
 
 def apply_middleware(*middlewares):
+    """
+    :param middlewares: middleware-functions to use with pyredux
+    :return: wrapper-function to use with create_store
+    """
 
     def store_wrapper(create_store):
 

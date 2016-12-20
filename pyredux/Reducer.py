@@ -12,6 +12,10 @@ default_reducer = singledispatch
 
 
 def combine_reducer(reducers):
+    """
+    :type reducers: list | tuple | dict
+    :return: a combined reducer
+    """
     combined_initial_state = pmap()
 
     reducer_names, reducer_funcs = _determine_reducer_names_and_funcs(reducers)

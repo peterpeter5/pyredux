@@ -7,6 +7,13 @@ class NotCallableError(Exception):
 
 
 def compose(*functions):
+    """
+    compose 2-N functions in a way that a function call of the composed function would end up like this:
+        f_3(f_2(f_1(*args, **kwargs))))
+    If you compose just 1 function the same function will be returned as a shortcut
+    :param functions: functions you want to compose
+    :return: composed functions
+    """
 
     def compose_two_funcs(func1, func2):
 
