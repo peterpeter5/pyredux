@@ -5,7 +5,7 @@ import inspect
 from pyrsistent import pmap
 
 from pyredux.ErrorsAndConstants import WrongFormattedReducerArgs
-from ..Reducer import combine_reducer
+from pyredux.Reducer import combine_reducer
 
 
 def a_reducer(action=None, state=pmap()):

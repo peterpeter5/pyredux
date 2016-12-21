@@ -45,4 +45,6 @@ fabric.properties
 PyEnv
 .coverage
 cover
-
+dist
+build
+*.egg-info

@@ -39,7 +39,7 @@ initialize a store.
 
 The Store-api is a little different to the js-api:
 
-    1. To retrieve the actual state instead of a getter a property is used: ```actual_state = store.state```
+    1. To retrieve the actual state instead of a getter a property is used: *actual_state = store.state*
     2. unsubscribe is done via store-method
 
 The state of the store is safed in an immutable [pmap](http://pyrsistent.readthedocs.io/en/latest/api.html#pyrsistent.pmap)
@@ -214,7 +214,7 @@ action dispatched, but only their "own" state-subtree.
 
 ## Actions
 
-### TLDR;
+### TL;DR
 The function ``` create_action_type``` creates a namedtuple with with the attributes:
 ``` type``` and ``` payload```. During creation, the ``` type``` attribute
 will get the name of the class as default value and the default value of

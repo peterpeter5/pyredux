@@ -1,8 +1,5 @@
 from __future__ import absolute_import, unicode_literals
-
-import collections
 import unittest
-
 from pyredux import Actions
 from pyredux.Actions import create_typed_action_creator
 

@@ -3,7 +3,7 @@ import unittest
 
 from pyrsistent import freeze
 from pyrsistent import pmap
-from ..Store import Store, create_store
+from pyredux.Store import Store, create_store
 from pyredux.ErrorsAndConstants import NoSubscriptionFoundError
 
 
