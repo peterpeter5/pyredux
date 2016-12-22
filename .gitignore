@@ -48,3 +48,4 @@ cover
 dist
 build
 *.egg-info
+Deploy

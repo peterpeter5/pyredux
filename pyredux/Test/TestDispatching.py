@@ -109,6 +109,18 @@ class FunctionalTests(unittest.TestCase):
             combined_reducer(unknown_action)
         )
 
+    def test_store_can_handle_reducer_with_singledispatch(self):
+        store = create_store(reducer_a)
+        action = StaticAction(type="AppendAction", payload="900")
+        new_state = store.dispatch(action)
+        expected_state = freeze({
+            "static": True,
+            "action": ("AppendAction", "900")
+
+        })
+        self.assertEqual(new_state, store.state)
+        self.assertEqual(new_state, expected_state)
+
     def test_store_can_handle_combined_reducers_with_singledispatch(self):
         combined = combine_reducer([reducer_a, normal_reducer])
         expected_state = freeze({

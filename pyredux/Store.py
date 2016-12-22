@@ -23,7 +23,7 @@ class Store(object):
 
     def __setup_reducers(self, action):
         if self.__state is None:
-            return self.__reducer(action=action)
+            return self.__reducer(action)
         else:
             return self.__reducer(action, self.__state)
 
