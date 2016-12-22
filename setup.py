@@ -8,9 +8,8 @@ install_req = reqs = [str(ir.req) for ir in requirements]
 
 setup(
     name='PyRedux',
-    version='0.0.2',
-    packages=['pyredux',
-              'pyredux-thunk'
+    version='0.0.3',
+    packages=['pyredux'
               ],
     url='https://github.com/peterpeter5/pyredux',
     license='MIT',

@@ -2,4 +2,3 @@ pyrsistent==0.11.13
 nose
 singledispatch
 coverage
-futures
