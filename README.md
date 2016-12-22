@@ -7,8 +7,8 @@ This library is a pythonic implementation
 of the original javascript-implementation with full-api support.
 
 
-This package should be compatible with python2.7 and python3.5 (tested on 2.7).
-
+This package is currently only compatible with python2.7.
+Support for Python >= 3.4 will be done in near future
 
 ## Dependencies
 - pyrsistent: persistent immutable data-structure

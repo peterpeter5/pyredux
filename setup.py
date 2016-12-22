@@ -7,8 +7,8 @@ requirements = parse_requirements(os.path.join(basepath, "./requirements.txt"), 
 install_req = reqs = [str(ir.req) for ir in requirements]
 
 setup(
-    name='PyRedux',
-    version='0.0.4',
+    name='pyredux',
+    version='0.0.5',
     packages=['pyredux'
               ],
     url='https://github.com/peterpeter5/pyredux',
