@@ -21,12 +21,12 @@ def combine_reducer(reducers):
     reducer_names, reducer_funcs = _determine_reducer_names_and_funcs(reducers)
 
     combined_initial_state = pmap(
-        map(
+        list(map(
             lambda red_name, red_func: (red_name, _get_initial_reducer_state(red_func)),
             reducer_names, reducer_funcs
-        )
+        ))
     )
-    final_reducers = pmap(zip(reducer_names, reducer_funcs))
+    final_reducers = pmap(list(zip(reducer_names, reducer_funcs)))
 
     def combination(action=None, state=combined_initial_state):
         next_state = state.copy()
@@ -51,7 +51,7 @@ def _determine_reducer_names_and_funcs(reducers):
         reducer_funcs = reducers.values()
 
     elif isinstance(reducers, collections.Iterable):
-        reducer_names = map(lambda red: _get_reducer_name_from_func(red), reducers)
+        reducer_names = list(map(lambda red: _get_reducer_name_from_func(red), reducers))
         reducer_funcs = reducers
     else:
         raise WrongFormattedReducerArgs(

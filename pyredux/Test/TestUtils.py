@@ -16,12 +16,12 @@ class TestCompose(unittest.TestCase):
     def test_non_composeable_args_are_listed_in_error_msg(self):
         call_able_args = (lambda x: x, lambda y: y)
         non_callble_args = ("a_string", dict())
-        non_callble_args_representation = map(str, non_callble_args)
-        call_able_args_representation = map(str, call_able_args)
+        non_callble_args_representation = list(map(str, non_callble_args))
+        call_able_args_representation = list(map(str, call_able_args))
         try:
             compose(*(call_able_args + non_callble_args))
         except NotCallableError as error:
-            error_message = error.message
+            error_message = getattr(error, "message", str(error))
         callables_not_in_error = map(
             lambda represent: str(represent) not in error_message,
             call_able_args_representation

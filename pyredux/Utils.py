@@ -37,7 +37,7 @@ def compose(*functions):
 def __check_and_raises_for_composability(functions):
     if len(functions) == 0:
         raise TypeError("Expected one or more function to compose")
-    non_callable_args = filter(lambda func: not callable(func), functions)
+    non_callable_args = list(filter(lambda func: not callable(func), functions))
     if len(non_callable_args) > 0:
         raise NotCallableError(
             "arguments <%s> are not callable and therefor can not be composed" % list(non_callable_args)

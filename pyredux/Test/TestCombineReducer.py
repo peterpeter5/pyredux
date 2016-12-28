@@ -41,6 +41,11 @@ class ActionMock(object):
 
 
 class TestCombineReducer(unittest.TestCase):
+
+    def setUp(self):
+        if not hasattr(self, "assertItemsEqual"):
+            self.assertItemsEqual = self.assertCountEqual
+
     def test_combine_reducer_returns_function(self):
         combined = combine_reducer([a_reducer, b_reducer])
         self.assertTrue(
@@ -61,7 +66,7 @@ class TestCombineReducer(unittest.TestCase):
     def test_state_split_keys_can_be_changed_through_dict(self):
         combined = combine_reducer({"a": a_reducer, "b": b_reducer})
         initial_state = combined(action={"unittest": "ignore"})
-        self.assertEqual(["a", "b"], initial_state.keys())
+        self.assertItemsEqual(["a", "b"], initial_state.keys())
 
     def test_combine_reducer_will_split_the_state_tree_in_sections_per_reducer_single(self):
         combined = combine_reducer([a_reducer])

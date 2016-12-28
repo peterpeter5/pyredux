@@ -44,7 +44,7 @@ class TestActionCreator(unittest.TestCase):
             [a_action, b_action, c_action]
         )
         self.assertTrue(all(actions_type))
-        actions_subtype = map(lambda action: action.type == "ActionA", [a_action, b_action])
-        actions_subtype.append(c_action.type == "myCustomSubType")
+        actions_subtype = [map(lambda action: action.type == "ActionA", [a_action, b_action]),
+                           c_action.type == "myCustomSubType"]
         self.assertTrue(all(actions_subtype))
         self.assertEqual(c_action.payload, "payload_c")

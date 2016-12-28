@@ -25,6 +25,10 @@ def do_nothing_reducer(action, state):
 
 class TestStore(unittest.TestCase):
 
+    def setUp(self):
+        if not hasattr(self, "assertItemsEqual" ):
+            self.assertItemsEqual = self.assertCountEqual
+
     def test_store_exposes_pythonic_js_api_plus_unsubscribe(self):
         store = Store(static_reducer)
         methods = dir(store)
