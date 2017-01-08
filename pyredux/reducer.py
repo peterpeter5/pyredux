@@ -3,7 +3,7 @@ import collections
 from pyrsistent import pmap
 
 try:
-    from collections import singledispatch
+    from functools import singledispatch
 except ImportError:
     from singledispatch import singledispatch
 

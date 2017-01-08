@@ -321,7 +321,7 @@ can compose the creator function with the ``` store.dispatch ```
 function to create "send my action right away function".
 
 ```python
-from pyredux.Utils import compose
+from pyredux.utils import compose
 
 
 CustomActionType, creator_func =  create_typed_action_creator("Signal")

@@ -11,7 +11,7 @@ install_req_test = reqs_test = [str(ir.req) for ir in requirements_test]
 
 setup(
     name='pyredux',
-    version='1.0.0',
+    version='1.0.1',
     packages=['pyredux'
               ],
     url='https://github.com/peterpeter5/pyredux',
