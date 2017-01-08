@@ -3,8 +3,8 @@ import unittest
 
 from pyrsistent import freeze
 from pyrsistent import pmap
-from pyredux.Store import Store, create_store
-from pyredux.ErrorsAndConstants import NoSubscriptionFoundError
+from pyredux.store import Store, create_store
+from pyredux.static_data import NoSubscriptionFoundError
 
 
 def static_reducer(action, state=pmap()):
@@ -24,9 +24,8 @@ def do_nothing_reducer(action, state):
 
 
 class TestStore(unittest.TestCase):
-
     def setUp(self):
-        if not hasattr(self, "assertItemsEqual" ):
+        if not hasattr(self, "assertItemsEqual"):
             self.assertItemsEqual = self.assertCountEqual
 
     def test_store_exposes_pythonic_js_api_plus_unsubscribe(self):
@@ -56,7 +55,7 @@ class TestStore(unittest.TestCase):
 
     def test_subscribes_accepts_callable_and_returns_store(self):
         store = Store(static_reducer)
-        rt_store = store.subscribe(lambda y:y)
+        rt_store = store.subscribe(lambda y: y)
         self.assertEqual(store, rt_store)
 
     def test_dispatch_calls_subscriber_with_store(self):
@@ -83,7 +82,8 @@ class TestStore(unittest.TestCase):
 
     def test_unsubscribe_successfully_removes_subscription(self):
         store = Store(static_reducer)
-        subscriber = lambda x: x
+
+        def subscriber(x): return x
         store.subscribe(subscriber)
         self.assertEqual(len(store._subscriber), 1)
         store.unsubscribe(subscriber)
@@ -110,5 +110,3 @@ class TestStore(unittest.TestCase):
             store.state,
             preloaded_state
         )
-
-

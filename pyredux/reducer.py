@@ -1,12 +1,13 @@
 from __future__ import absolute_import, unicode_literals
 import collections
 from pyrsistent import pmap
+
 try:
     from collections import singledispatch
 except ImportError:
     from singledispatch import singledispatch
 
-from pyredux.ErrorsAndConstants import StoreInitAction, WrongFormattedReducerArgs
+from pyredux.static_data import StoreInitAction, WrongFormattedReducerArgs
 
 default_reducer = singledispatch
 
@@ -61,6 +62,3 @@ def _determine_reducer_names_and_funcs(reducers):
 
 def _get_initial_reducer_state(reducer_func):
     return reducer_func(StoreInitAction())
-
-
-

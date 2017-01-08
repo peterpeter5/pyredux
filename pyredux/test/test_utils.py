@@ -1,7 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 import unittest
 
-from pyredux.Utils import compose, NotCallableError
+from pyredux.utils import compose, NotCallableError
 
 
 class TestCompose(unittest.TestCase):
@@ -57,7 +57,7 @@ class TestCompose(unittest.TestCase):
         self.assertEqual(compose(half, square, double)(8), 128)
 
     def test_composing_only_one_function_returns_identity(self):
-        double = lambda x: x * 2
+        def double(x): return x * 2
         self.assertEqual(double, compose(double))
 
     def test_composing_zero_function_raises_type_error(self):

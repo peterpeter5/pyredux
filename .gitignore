@@ -49,3 +49,5 @@ dist
 build
 *.egg-info
 Deploy
+*.pyc
+.cache

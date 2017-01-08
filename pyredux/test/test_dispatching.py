@@ -53,7 +53,6 @@ def logging_middleware(store, next_middleware, action):
 
 
 class FunctionalTests(unittest.TestCase):
-
     def setUp(self):
         global logger
         logger = []
@@ -78,7 +77,7 @@ class FunctionalTests(unittest.TestCase):
             "reducer_a": {
                 "static": True,
                 "action": ("AppendAction", "900")
-                          }
+            }
         })
         self.assertEqual(
             expected_state,

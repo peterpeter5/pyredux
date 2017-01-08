@@ -8,7 +8,8 @@ class NotCallableError(Exception):
 
 def compose(*functions):
     """
-    compose 2-N functions in a way that a function call of the composed function would end up like this:
+    compose 2-N functions in a way that a function call of the composed
+    function would end up like this:
         f_3(f_2(f_1(*args, **kwargs))))
     If you compose just 1 function the same function will be returned as a shortcut
     :param functions: functions you want to compose
@@ -26,7 +27,7 @@ def compose(*functions):
         composed = reduce(compose_two_funcs, funcs)
         return composed(*args, **kwargs)
 
-    __check_and_raises_for_composability(functions)
+    _check_and_raises_for_composability(functions)
 
     if len(functions) == 1:
         return functions[0]
@@ -34,7 +35,7 @@ def compose(*functions):
     return composition
 
 
-def __check_and_raises_for_composability(functions):
+def _check_and_raises_for_composability(functions):
     if len(functions) == 0:
         raise TypeError("Expected one or more function to compose")
     non_callable_args = list(filter(lambda func: not callable(func), functions))
@@ -42,5 +43,3 @@ def __check_and_raises_for_composability(functions):
         raise NotCallableError(
             "arguments <%s> are not callable and therefor can not be composed" % list(non_callable_args)
         )
-
-

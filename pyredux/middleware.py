@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 from functools import wraps
-from pyredux.Utils import compose
+from pyredux.utils import compose
 
 
 def middleware(func):

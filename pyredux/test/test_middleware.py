@@ -4,9 +4,9 @@ import unittest
 from pyrsistent import pmap
 from pyrsistent import pvector
 
-from pyredux.Actions import create_action_type
-from pyredux.Middleware import apply_middleware, middleware
-from pyredux.Store import create_store
+from pyredux.actions import create_action_type
+from pyredux.middleware import apply_middleware, middleware
+from pyredux.store import create_store
 
 call_chain = []
 
@@ -16,7 +16,9 @@ def middleware_a(store):
         def _middleware(action):
             call_chain.append("a")
             return next_middleware(action)
+
         return _middleware
+
     return _next_wrapper
 
 
@@ -25,7 +27,9 @@ def middleware_b(store):
         def middleware(action):
             call_chain.append("b")
             return next_middleware(action)
+
         return middleware
+
     return _nextwrapper
 
 
@@ -36,7 +40,9 @@ def middleware_dispatching_extra(store):
                 store.dispatch(MiddleWareAction())
             call_chain.append("c")
             return next_middleware(action)
+
         return middleware
+
     return _nextwrapper
 
 
@@ -55,12 +61,12 @@ def default_action_logger(action, state=pmap({"actions": pvector()})):
     else:
         return state
 
+
 DefaultAction = create_action_type("Unittest")
 MiddleWareAction = create_action_type("MiddleWareAction")
 
 
 class TestMiddleware(unittest.TestCase):
-
     def setUp(self):
         global call_chain
         call_chain = []
@@ -101,4 +107,3 @@ class TestMiddleware(unittest.TestCase):
         )
         store.dispatch(DefaultAction())
         self.assertEqual(call_chain, ["c", "d", "c", "d"])
-

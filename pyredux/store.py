@@ -1,6 +1,6 @@
 from __future__ import unicode_literals, absolute_import
 
-from pyredux.ErrorsAndConstants import NoSubscriptionFoundError, StoreInitAction
+from pyredux.static_data import NoSubscriptionFoundError, StoreInitAction
 from pyrsistent import pmap, pvector
 
 

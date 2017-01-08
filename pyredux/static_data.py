@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
-from pyredux.Actions import create_action_type
+from pyredux.actions import create_action_type
 
 
 class NoSubscriptionFoundError(Exception):

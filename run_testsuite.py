@@ -16,7 +16,7 @@ def run_my_tests():
         all_tests = itertools.chain(all_tests, TestLoader().loadTestsFromDir(path))
     suite = LazySuite(all_tests)
 
-    nose.run(suite=suite, argv=["--with-coverage", "--cover-html"])
+    nose.run(suite=suite, argv=["--with-coverage", "--cover-html", "--cover-package=pyredux"])
 
 if __name__ == '__main__':
     run_my_tests()

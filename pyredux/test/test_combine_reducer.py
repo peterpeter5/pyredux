@@ -4,8 +4,8 @@ import inspect
 
 from pyrsistent import pmap
 
-from pyredux.ErrorsAndConstants import WrongFormattedReducerArgs
-from pyredux.Reducer import combine_reducer
+from pyredux.static_data import WrongFormattedReducerArgs
+from pyredux.reducer import combine_reducer
 
 
 def a_reducer(action=None, state=pmap()):
@@ -41,7 +41,6 @@ class ActionMock(object):
 
 
 class TestCombineReducer(unittest.TestCase):
-
     def setUp(self):
         if not hasattr(self, "assertItemsEqual"):
             self.assertItemsEqual = self.assertCountEqual

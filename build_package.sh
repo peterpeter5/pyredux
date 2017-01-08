@@ -4,6 +4,8 @@ mkdir -p ./Deploy/dist/
 mkdir -p ./Deploy/Test/
 
 source ./PyEnv/bin/activate
+python setup.py test
+python setup.py flake8
 
 python setup.py build bdist_wheel --bdist-dir ./Deploy/build --dist-dir ./Deploy/dist
 rm -r -f ./build/
